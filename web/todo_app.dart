@@ -21,7 +21,7 @@ import 'package:react/react_client.dart';
 import 'package:over_react/over_react.dart';
 
 import 'actions.dart';
-import 'store.dart';
+import 'stores.dart';
 import 'components/todo_app_component.dart';
 
 main() async {

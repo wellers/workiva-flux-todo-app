@@ -17,7 +17,7 @@ library w_flux.example.todo_app.components.new_todo_input;
 import 'package:react/react.dart' as react;
 import 'package:over_react/over_react.dart';
 
-import '../store.dart';
+import '../stores.dart';
 import '../actions.dart';
 
 @Factory()

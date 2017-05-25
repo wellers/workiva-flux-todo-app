@@ -16,7 +16,7 @@ library w_flux.example.todo_app.components.todo_list_item;
 
 import 'package:over_react/over_react.dart';
 
-import '../store.dart';
+import '../stores.dart';
 import '../actions.dart';
 
 @Factory()

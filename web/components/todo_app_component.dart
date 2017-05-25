@@ -19,7 +19,7 @@ import 'package:over_react/over_react.dart';
 import 'new_todo_input.dart';
 import 'todo_list_item.dart';
 
-import '../store.dart';
+import '../stores.dart';
 import '../actions.dart';
 
 @Factory()

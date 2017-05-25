@@ -16,7 +16,7 @@ library w_flux.example.todo_app.actions;
 
 import 'package:w_flux/w_flux.dart';
 
-import 'store.dart';
+import 'stores.dart';
 
 class ToDoActions {
   final Action<Todo> createTodo = new Action<Todo>();
