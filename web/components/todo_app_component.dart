@@ -14,47 +14,61 @@
 
 library w_flux.example.todo_app.components.todo_app_component;
 
-import 'package:react/react.dart' as react;
-import 'package:w_flux/w_flux.dart';
+import 'package:over_react/over_react.dart';
 
 import 'new_todo_input.dart';
 import 'todo_list_item.dart';
-import '../actions.dart';
+
 import '../store.dart';
+import '../actions.dart';
 
-var ToDoAppComponent = react.registerComponent(() => new _ToDoAppComponent());
+@Factory()
+UiFactory<ToDoAppProps> ToDoApp;
 
-class _ToDoAppComponent extends FluxComponent<ToDoActions, ToDoStore> {
+@Props()
+class ToDoAppProps extends FluxUiProps<ToDoActions, ToDoStore> {}
+
+@State()
+class ToDoState extends UiState {}
+
+@Component()
+class ToDoAppComponent
+    extends FluxUiStatefulComponent<ToDoAppProps, ToDoState> {
+  getDefaultProps() => (newProps());
+
+  @override
   render() {
     List todoListItems = [];
-    store.todos.forEach((Todo todo) {
-      todoListItems.add(TodoListItem({'todo': todo, 'onClick': _completeTodo}));
+    int keyProp = 0;
+    props.store.todos.forEach((Todo todo) {
+      todoListItems.add((TodoListItem()
+        ..key = keyProp
+        ..todo = todo
+        ..onClick = _completeTodo)());
+      keyProp++;
     });
-    var todoList = react.div({'className': 'list-group'}, todoListItems);
 
-    var pageHeader = react.div({'className': 'page-header'}, react.h1({}, 'My Todos'));
-    var clearButton = react.button(
-        {'onClick': _clearList, 'disabled': store.todos.length == 0},
-        'Clear Todo List');
+    var todoList = (Dom.div()..className = 'list-group')(todoListItems);
 
-    return react.div({}, [
-      pageHeader,
-      react.p({}, 'A sample Todo application'),
-      NewTodoInput({'onSubmit': _createTodo}),
-      todoList,
-      clearButton
-    ]);
+    var pageHeader =
+        (Dom.div()..className = 'page-header')(Dom.h1()('My Todos'));
+    var clearButton = (Dom.button()
+      ..onClick = _clearList
+      ..disabled = props.store.todos.length == 0)('Clear Todo List');
+
+    return Dom.div()(pageHeader, Dom.p()('A sample Todo application'),
+        (NewTodoInput()..onSubmit = _createTodo)(), todoList, clearButton);
   }
 
   _clearList(_) {
-    this.actions.clearTodoList();
+    props.actions.clearTodoList();
   }
 
   _createTodo(String value) {
-    this.actions.createTodo(new Todo(value));
+    props.actions.createTodo(new Todo(value));
   }
 
   _completeTodo(todo) {
-    this.actions.completeTodo(todo);
+    props.actions.completeTodo(todo);
   }
 }

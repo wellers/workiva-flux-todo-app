@@ -15,34 +15,49 @@
 library w_flux.example.todo_app.components.new_todo_input;
 
 import 'package:react/react.dart' as react;
+import 'package:over_react/over_react.dart';
 
-var NewTodoInput = react.registerComponent(() => new _NewTodoInput());
+import '../store.dart';
+import '../actions.dart';
 
-class _NewTodoInput extends react.Component {
-  String get value => state['value'];
-  Function get onSubmit => props['onSubmit'];
+@Factory()
+UiFactory<NewTodoInputProps> NewTodoInput;
 
-  getInitialState() => {'value': ''};
+@Props()
+class NewTodoInputProps extends FluxUiProps<ToDoActions, ToDoStore> {
+  String value;
+  Function onSubmit;
+}
+
+@State()
+class NewTodoInputState extends UiState {
+  String value;
+}
+
+@Component()
+class NewTodoInputComponent
+    extends FluxUiStatefulComponent<NewTodoInputProps, NewTodoInputState> {
+  getDefaultProps() => (newProps()..value = '');
+
+  @override
+  Map getInitialState() => (newState()..value = '');
 
   render() {
-    return react.form(
-        {'onSubmit': _onSubmit},
-        react.input({
-          'className': 'form-control',
-          'placeholder': 'Add a new todo...',
-          'type': 'text',
-          'value': value,
-          'onChange': _onChange
-        }));
+    return (Dom.form()..onSubmit = _onSubmit)((Dom.input()
+      ..className = 'form-control'
+      ..placeholder = 'Add a new todo...'
+      ..type = 'text'
+      ..value = state.value
+      ..onChange = _onChange)());
   }
 
   _onChange(react.SyntheticFormEvent event) {
-    setState({'value': event.target.value});
+    setState(newState()..value = event.target.value);
   }
 
   _onSubmit(event) {
     event.preventDefault();
-    onSubmit(value);
-    this.setState({'value': ''});
+    props.onSubmit(state.value);
+    this.setState(newState()..value = '');
   }
 }

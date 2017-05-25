@@ -14,37 +14,37 @@
 
 library w_flux.example.todo_app.components.todo_list_item;
 
-import 'package:react/react.dart' as react;
+import 'package:over_react/over_react.dart';
 
 import '../store.dart';
+import '../actions.dart';
 
-var TodoListItem = react.registerComponent(() => new _TodoListItem());
+@Factory()
+UiFactory<TodoListItemProps> TodoListItem;
 
-class _TodoListItem extends react.Component {
-  Todo get todo => props['todo'];
-  Function get onClick => props['onClick'];
+@Props()
+class TodoListItemProps extends FluxUiProps<ToDoActions, ToDoStore> {
+  Todo todo;
+  Function onClick;
+}
 
-  getDefaultProps() => {'todo': null};
+@Component()
+class TodoListItemComponent extends FluxUiComponent<TodoListItemProps> {
+  getDefaultProps() => (newProps()..todo = null);
 
   render() {
     String className =
-        todo.completed ? 'list-group-item completed' : 'list-group-item';
-    return react.span({
-      'className': className
-    }, [
-      react.label({}, [
-        react.input({
-          'type': 'checkbox',
-          'label': todo.description,
-          'checked': todo.completed,
-          'onChange': _onClick
-        }),
-        todo.description
-      ])
-    ]);
+        props.todo.completed ? 'list-group-item completed' : 'list-group-item';
+    return (Dom.span()..className = className)(Dom.label()(
+        (Dom.input()
+          ..type = 'checkbox'
+          ..label = props.todo.description
+          ..checked = props.todo.completed
+          ..onChange = _onClick)(),
+        props.todo.description));
   }
 
   _onClick(event) {
-    onClick(todo);
+    props.onClick(props.todo);
   }
 }
